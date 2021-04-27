@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30330.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuplaNotificationIntegration", "SuplaNotificationIntegration.csproj", "{49D30CFF-48E3-4748-B105-A3068E0A3349}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuplaNotificationIntegration", "SuplaNotificationIntegration.csproj", "{49D30CFF-48E3-4748-B105-A3068E0A3349}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNIClassLibrary", "..\SNIClassLibrary\SNIClassLibrary.csproj", "{BF8196B4-D54C-482E-8734-38D4412A2C1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{49D30CFF-48E3-4748-B105-A3068E0A3349}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49D30CFF-48E3-4748-B105-A3068E0A3349}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49D30CFF-48E3-4748-B105-A3068E0A3349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF8196B4-D54C-482E-8734-38D4412A2C1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF8196B4-D54C-482E-8734-38D4412A2C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF8196B4-D54C-482E-8734-38D4412A2C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF8196B4-D54C-482E-8734-38D4412A2C1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
