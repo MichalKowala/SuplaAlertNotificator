@@ -10,5 +10,6 @@ namespace SuplaNotificationIntegration
         public static string SniContainer => "SNI_CONTAINER";
         public static string DevicesFile => "SNI_DEVICES_FILENAME";
         public static string SubscribersFile => "SNI_SUBSCRIBERS_FILENAME";
+        public static string AlertLogsFolder => "SNI_ALERT_LOGS_FOLDERNAME";
     }
 }
