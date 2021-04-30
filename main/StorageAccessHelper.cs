@@ -17,7 +17,7 @@ namespace SuplaNotificationIntegration
             _client = _storage.CreateCloudBlobClient();
             _container = _client.GetContainerReference(Environment.GetEnvironmentVariable(EnvKeys.SniContainer));
         }
-        public CloudBlockBlob GetBlockBlobReference(string filename)
+        public CloudBlockBlob GetSNIContainerBlockBlobReference(string filename)
         {
             return _container.GetBlockBlobReference(filename);
         }

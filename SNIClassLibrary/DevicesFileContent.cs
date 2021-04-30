@@ -9,7 +9,6 @@ namespace SNIClassLibrary
     {
 
         [JsonProperty("devices")]
-
         public List<Device> Devices { get; set; }
     }
 }
