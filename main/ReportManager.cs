@@ -17,39 +17,45 @@ namespace SuplaNotificationIntegration
 {
     public class ReportManager
     {
-        public string PrepareReportMessage()
+        public List<QuarterlyReport> GenerateQuarterlyReports()
         {
             List<Device> devices = GetDevicesList();
-            foreach (Device d in devices)
-                d.CheckMeasures();
-
-            StringBuilder message = new StringBuilder();
+            List<QuarterlyReport> reports = new List<QuarterlyReport>();
             foreach (Device device in devices)
             {
-                if (device.IsConnected==false)
+                device.CheckMeasures();
+            }
+            foreach (Device device in devices)
+            {
+                QuarterlyReport report = new QuarterlyReport();
+                report.DeviceName = device.Link;
+                if (device.IsConnected == false)
                 {
-                    message.AppendLine(DateTime.Now.ToString());
-                    message.AppendLine($"Warning: could not connect to {device.Link}");
-                    message.AppendLine();
+                    report.IncorrectReadings.Add("Cant connect to the device");
                 }
                 foreach (MeasuredProperty property in device.MeasuredProperties)
                 {
-                    if (property.Actual!=null)
-                    {
-                        if (property.Actual>property.Max || property.Actual<property.Min)
+                    var sb = new StringBuilder();
+                    if (property.Actual != null)
+                        if (property.Actual > property.Max || property.Actual < property.Min)
                         {
-                            message.AppendLine(DateTime.Now.ToString());
-                            message.AppendLine($"Warning: Threshold exceeded at {device.Link}");
-                            message.AppendLine($"{property.Name} - Expected MAX:{property.Max} MIN:{property.Min} ACTUAL:{property.Actual}");
-                            message.AppendLine();
+                            sb.AppendLine("Threshold Exceeded");
+                            sb.AppendLine($"Max: {property.Max}");
+                            sb.AppendLine($"Min: {property.Min}");
+                            sb.AppendLine($"Actual: {property.Actual}");
+                            report.IncorrectReadings.Add(sb.ToString());
                         }
-                    }
+                        else
+                        {
+                            sb.AppendLine($"Max: {property.Max}");
+                            sb.AppendLine($"Min: {property.Min}");
+                            sb.AppendLine($"Actual: {property.Actual}");
+                            report.CorrectReadings.Add(sb.ToString());
+                        }
                 }
+                reports.Add(report);
             }
-            if (message.Length != 0)
-                return message.ToString();
-            else
-                return "ok";
+            return reports;
         }
 
         private List<Device> GetDevicesList()
