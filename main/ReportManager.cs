@@ -28,29 +28,26 @@ namespace SuplaNotificationIntegration
             foreach (Device device in devices)
             {
                 QuarterlyReport report = new QuarterlyReport();
-                report.DeviceName = device.Link;
+                report.DeviceName = device.Name;
                 if (device.IsConnected == false)
                 {
-                    report.IncorrectReadings.Add("Cant connect to the device");
+                    report.IncorrectReadings.Add($"{DateTime.Now.ToString("HH: mm")} Cant connect to the {device.Name} device");
                 }
                 foreach (MeasuredProperty property in device.MeasuredProperties)
                 {
-                    var sb = new StringBuilder();
+                    string message = "";
                     if (property.Actual != null)
                         if (property.Actual > property.Max || property.Actual < property.Min)
                         {
-                            sb.AppendLine("Threshold Exceeded");
-                            sb.AppendLine($"Max: {property.Max}");
-                            sb.AppendLine($"Min: {property.Min}");
-                            sb.AppendLine($"Actual: {property.Actual}");
-                            report.IncorrectReadings.Add(sb.ToString());
+                            message += $"{DateTime.Now.ToString("HH:mm")} {property.Name} threshold exceeded " +
+                                $"Max: {property.Max} Min: {property.Min} Actual: {property.Actual}";
+                            report.IncorrectReadings.Add(message);
                         }
                         else
                         {
-                            sb.AppendLine($"Max: {property.Max}");
-                            sb.AppendLine($"Min: {property.Min}");
-                            sb.AppendLine($"Actual: {property.Actual}");
-                            report.CorrectReadings.Add(sb.ToString());
+                            message += $"{DateTime.Now.ToString("HH:mm")} {property.Name} " +
+                                $"Max: {property.Max} Min: {property.Min} Actual: {property.Actual}";
+                            report.CorrectReadings.Add(message.ToString());
                         }
                 }
                 reports.Add(report);
@@ -84,25 +81,35 @@ namespace SuplaNotificationIntegration
             else return new List<string>();
         }
 
-        public async Task MailTheReport(string message)
+        public async Task MailTheReport(List<QuarterlyReport> reports)
         {
-            var mailSubscribers = GetSubscribersList(SubscriptionType.Mail);
+            
+            StringBuilder htmlMessage = new StringBuilder();
 
-            var apiKey = Environment.GetEnvironmentVariable("test_klucz");
+            foreach (QuarterlyReport report in reports)
+            {
+                htmlMessage.AppendLine($"{report.DeviceName} <br>");
+                foreach (string alert in report.IncorrectReadings)
+                {
+                    htmlMessage.AppendLine($"{alert} <br>");
+                }
+            }
+            var mailToList = GetSubscribersList(SubscriptionType.Mail);
+            var apiKey = Environment.GetEnvironmentVariable(EnvKeys.SNI_SendGrid_ApiKey);
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("romthannatar@gmail.com");
-            var subject = $"Report {DateTime.Now}";
-            var plainTextContent = message;
-            var htmlContent = "<strong> test siemaneczko </strong>";
+            var from = new EmailAddress(Environment.GetEnvironmentVariable(EnvKeys.SNI_SendGrid_Mail));
+            var subject = $"SNI Report {DateTime.Now.ToString("dd MMMMM")}";
+            var htmlContent = htmlMessage.ToString();
+            var plainTextContent = htmlContent.Replace("<br","");
 
-            foreach (var subscriber in mailSubscribers)
+            foreach (var subscriber in mailToList)
             {
                 var msg = MailHelper.CreateSingleEmail(
                 from,
                 new EmailAddress(subscriber),
                 subject,
                 plainTextContent,
-                plainTextContent);
+                htmlContent);
                 var response = await client.SendEmailAsync(msg);
             }
 

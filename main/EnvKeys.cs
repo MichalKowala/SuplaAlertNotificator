@@ -14,5 +14,7 @@ namespace SuplaNotificationIntegration
         public static string SNIDbKey => "SNI_DB_KEY";
         public static string SNIDbName => "SNI_DB_NAME";
         public static string SNIDbUrl => "SNI_DB_URL";
+        public static string SNI_SendGrid_Mail => "SNI_SendGrid_Mail";
+        public static string SNI_SendGrid_ApiKey => "SNI_SendGrid_Api_Key";
     }
 }

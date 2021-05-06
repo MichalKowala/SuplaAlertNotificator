@@ -12,6 +12,7 @@ namespace SNIClassLibrary
     public class Device
     {
         public string Link { get; set; }
+        public string Name { get; set; }
         public bool IsConnected { get; set; }
         public List<MeasuredProperty> MeasuredProperties { get; set; }
         public void CheckMeasures()
