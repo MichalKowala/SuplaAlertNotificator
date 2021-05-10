@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Cosmos;
 using SNIClassLibrary;
+using SuplaNotificationIntegration.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SuplaNotificationIntegration
 {
-    public class ReportsArchivizer
+    public class ReportsArchivizer : IReportsArchivizer
     {
         private readonly string CosmosUrl = Environment.GetEnvironmentVariable(EnvKeys.SNIDbUrl);
         private readonly string DbKey = Environment.GetEnvironmentVariable(EnvKeys.SNIDbKey);
@@ -23,7 +24,7 @@ namespace SuplaNotificationIntegration
             {
                 await this.CreateContainerAsync(quarterlyReport.DeviceName);
                 await this.CreateDailyReportIfNotExisting(quarterlyReport.DeviceName);
-                await this.AppendyQuearterlyReportToDailyReport(quarterlyReport);
+                await this.AppendQuearterlyReportToDailyReport(quarterlyReport);
             }
         }
         private async Task CreateDatabaseAsync()
@@ -47,7 +48,7 @@ namespace SuplaNotificationIntegration
                     await this.container.CreateItemAsync<DailyReport>(dailyReport, new PartitionKey(dailyReport.Id.ToString()));
             }
         }
-        private async Task AppendyQuearterlyReportToDailyReport(QuarterlyReport quarterlyReport)
+        private async Task AppendQuearterlyReportToDailyReport(QuarterlyReport quarterlyReport)
         {
             var queryText = $"SELECT * FROM c WHERE c.Date=\"{DateTime.Now.ToString("dd/MM/yyyy")}\"";
             QueryDefinition queryDefinition = new QueryDefinition(queryText);

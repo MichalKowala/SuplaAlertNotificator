@@ -5,18 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using Microsoft.Extensions.Configuration;
-using Azure.Storage.Blobs;
-using Microsoft.Azure.Storage.Blob;
-using Microsoft.Azure.Storage;
-using System;
-using System.IO;
 using Newtonsoft.Json;
+using SuplaNotificationIntegration.Interfaces;
 
 namespace SuplaNotificationIntegration
 {
-    public class ReportManager
+    public class ReportsManager : IReportsManager
     {
+        private readonly IStorageAccessHelper _storageAccessHelper;
+        public ReportsManager(IStorageAccessHelper storageAccessHelper)
+        {
+            _storageAccessHelper = storageAccessHelper;
+        }
         public List<QuarterlyReport> GenerateQuarterlyReports()
         {
             List<Device> devices = GetDevicesList();
@@ -57,8 +57,7 @@ namespace SuplaNotificationIntegration
 
         private List<Device> GetDevicesList()
         {
-            StorageAccessHelper storage = new StorageAccessHelper();
-            var devicesAsJson = storage
+            var devicesAsJson = _storageAccessHelper
                 .GetSNIContainerBlockBlobReference(Environment.GetEnvironmentVariable(EnvKeys.DevicesFile))
                 .DownloadText();
             var fileContent = JsonConvert.DeserializeObject<DevicesFileContent>(devicesAsJson);
@@ -67,21 +66,18 @@ namespace SuplaNotificationIntegration
 
         private List<string> GetSubscribersList(SubscriptionType subType)
         {
-            StorageAccessHelper storage = new StorageAccessHelper();
-            var devicesAsJson = storage
+            var devicesAsJson = _storageAccessHelper
                 .GetSNIContainerBlockBlobReference(Environment.GetEnvironmentVariable(EnvKeys.SubscribersFile))
                 .DownloadText();
             var fileContent = JsonConvert.DeserializeObject<SubscribersFileContent>(devicesAsJson);
 
             if (subType == SubscriptionType.Mail)
                 return fileContent.Emails;
-            if (subType == SubscriptionType.SMS)
+            else
                 return fileContent.SMSes;
-
-            else return new List<string>();
         }
 
-        public async Task MailTheReport(List<QuarterlyReport> reports)
+        public async Task MailTheReports(List<QuarterlyReport> reports)
         {
             
             StringBuilder htmlMessage = new StringBuilder();
@@ -112,7 +108,11 @@ namespace SuplaNotificationIntegration
                 htmlContent);
                 var response = await client.SendEmailAsync(msg);
             }
+        }
 
+        public async Task SMSTheReports(List<QuarterlyReport> reports)
+        {
+            throw new NotImplementedException();
         }
     }
 }

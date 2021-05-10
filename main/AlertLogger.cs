@@ -1,13 +1,14 @@
 ﻿using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
+using SuplaNotificationIntegration.Interfaces;
 using System;
 using System.IO;
 
 namespace SuplaNotificationIntegration
 {
-    public class AlertLogger
+    public class AlertsLogger : IAlertsLogger
     {
-        public void Log(string message)
+        public void LogTheAlerts(string message)
         {
             string fileName = Environment.GetEnvironmentVariable(EnvKeys.AlertLogsFolder) + "/" + DateTime.Now.ToString("dd.MM.yyyy");
             StorageAccessHelper storage = new StorageAccessHelper();

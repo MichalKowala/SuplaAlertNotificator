@@ -1,7 +1,7 @@
-﻿using Cosmonaut;
-using Cosmonaut.Extensions.Microsoft.DependencyInjection;
-using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using SNIClassLibrary;
+using SuplaNotificationIntegration.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +14,10 @@ namespace SuplaNotificationIntegration
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-          
+            builder.Services.AddTransient<IAlertsLogger, AlertsLogger>();
+            builder.Services.AddTransient<IReportsArchivizer, ReportsArchivizer>();
+            builder.Services.AddTransient<IReportsManager, ReportsManager>();
+            builder.Services.AddTransient<IStorageAccessHelper, StorageAccessHelper>();
         }
     }
 }

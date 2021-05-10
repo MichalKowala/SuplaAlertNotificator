@@ -1,12 +1,13 @@
 ﻿using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
+using SuplaNotificationIntegration.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace SuplaNotificationIntegration
 {
-    public class StorageAccessHelper
+    public class StorageAccessHelper : IStorageAccessHelper
     {
         private readonly CloudStorageAccount _storage;
         private readonly CloudBlobClient _client;
