@@ -10,7 +10,7 @@ namespace SuplaNotificationIntegration
     {
         public void LogTheAlerts(string message)
         {
-            string fileName = Environment.GetEnvironmentVariable(EnvKeys.AlertLogsFolder) + "/" + DateTime.Now.ToString("dd.MM.yyyy");
+            string fileName = EnvKeys.AlertLogsFolder + "/" + DateTime.Now.ToString("dd.MM.yyyy");
             StorageAccessHelper storage = new StorageAccessHelper();
             CloudBlockBlob blob = storage.GetSNIContainerBlockBlobReference(fileName);
             using (MemoryStream stream = new MemoryStream())

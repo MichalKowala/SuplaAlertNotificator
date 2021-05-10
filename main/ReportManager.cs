@@ -31,7 +31,7 @@ namespace SuplaNotificationIntegration
                 report.DeviceName = device.Name;
                 if (device.IsConnected == false)
                 {
-                    report.IncorrectReadings.Add($"{DateTime.Now.ToString("HH: mm")} Cant connect to the {device.Name} device");
+                    report.IncorrectReadings.Add($"{DateTime.Now.ToString("HH:mm")} Cant connect to the {device.Name} device");
                 }
                 foreach (MeasuredProperty property in device.MeasuredProperties)
                 {
@@ -58,7 +58,7 @@ namespace SuplaNotificationIntegration
         private List<Device> GetDevicesList()
         {
             var devicesAsJson = _storageAccessHelper
-                .GetSNIContainerBlockBlobReference(Environment.GetEnvironmentVariable(EnvKeys.DevicesFile))
+                .GetSNIContainerBlockBlobReference(EnvKeys.DevicesFile)
                 .DownloadText();
             var fileContent = JsonConvert.DeserializeObject<DevicesFileContent>(devicesAsJson);
             return fileContent.Devices;
@@ -67,7 +67,7 @@ namespace SuplaNotificationIntegration
         private List<string> GetSubscribersList(SubscriptionType subType)
         {
             var devicesAsJson = _storageAccessHelper
-                .GetSNIContainerBlockBlobReference(Environment.GetEnvironmentVariable(EnvKeys.SubscribersFile))
+                .GetSNIContainerBlockBlobReference(EnvKeys.SubscribersFile)
                 .DownloadText();
             var fileContent = JsonConvert.DeserializeObject<SubscribersFileContent>(devicesAsJson);
 
@@ -91,9 +91,9 @@ namespace SuplaNotificationIntegration
                 }
             }
             var mailToList = GetSubscribersList(SubscriptionType.Mail);
-            var apiKey = Environment.GetEnvironmentVariable(EnvKeys.SNI_SendGrid_ApiKey);
+            var apiKey = EnvKeys.SNI_SendGrid_ApiKey;
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress(Environment.GetEnvironmentVariable(EnvKeys.SNI_SendGrid_Mail));
+            var from = new EmailAddress(EnvKeys.SNI_SendGrid_Mail);
             var subject = $"SNI Report {DateTime.Now.ToString("dd MMMMM")}";
             var htmlContent = htmlMessage.ToString();
             var plainTextContent = htmlContent.Replace("<br","");

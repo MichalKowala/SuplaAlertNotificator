@@ -14,9 +14,9 @@ namespace SuplaNotificationIntegration
         private readonly CloudBlobContainer _container;
         public StorageAccessHelper()
         {
-            _storage = CloudStorageAccount.Parse(Environment.GetEnvironmentVariable(EnvKeys.StorageConnString));
+            _storage = CloudStorageAccount.Parse(EnvKeys.StorageConnString);
             _client = _storage.CreateCloudBlobClient();
-            _container = _client.GetContainerReference(Environment.GetEnvironmentVariable(EnvKeys.SniContainer));
+            _container = _client.GetContainerReference(EnvKeys.SniContainer);
         }
         public CloudBlockBlob GetSNIContainerBlockBlobReference(string filename)
         {
