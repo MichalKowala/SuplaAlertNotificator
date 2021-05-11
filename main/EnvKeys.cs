@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SuplaNotificationIntegration
 {
@@ -13,8 +11,8 @@ namespace SuplaNotificationIntegration
         public static string AlertLogsFolder => Environment.GetEnvironmentVariable("SNI_ALERT_LOGS_FOLDERNAME");
         public static string SNIDbKey => Environment.GetEnvironmentVariable("SNI_DB_KEY");
         public static string SNIDbName => Environment.GetEnvironmentVariable("SNI_DB_NAME");
-        public static string SNIDbUrl => Environment.GetEnvironmentVariable("SNI_DB_URL");
-        public static string SNI_SendGrid_Mail => Environment.GetEnvironmentVariable("SNI_SendGrid_Mail");
-        public static string SNI_SendGrid_ApiKey => Environment.GetEnvironmentVariable("SNI_SendGrid_Api_Key");
+        public static string SNIDbUri => Environment.GetEnvironmentVariable("SNI_DB_URI");
+        public static string SNISendGridMail => Environment.GetEnvironmentVariable("SNI_SendGrid_Mail");
+        public static string SNISendGridApiKey => Environment.GetEnvironmentVariable("SNI_SendGrid_Api_Key");
     }
 }

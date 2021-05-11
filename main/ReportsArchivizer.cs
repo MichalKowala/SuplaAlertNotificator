@@ -10,13 +10,13 @@ namespace SuplaNotificationIntegration
 {
     public class ReportsArchivizer : IReportsArchivizer
     {
-        private readonly string CosmosUrl = EnvKeys.SNIDbUrl;
+        private readonly string CosmosUrl = EnvKeys.SNIDbUri;
         private readonly string DbKey = EnvKeys.SNIDbKey;
         private CosmosClient cosmosClient;
         private Database database;
         private Container container;
         private string databaseId = EnvKeys.SNIDbName;
-        public async Task ArchivizeReports(List<QuarterlyReport> quarterlyReports)
+        public async Task ArchivizeTheReports(List<QuarterlyReport> quarterlyReports)
         {
             this.cosmosClient = new CosmosClient(CosmosUrl, DbKey);
             await this.CreateDatabaseAsync();

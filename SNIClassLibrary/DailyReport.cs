@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SNIClassLibrary
 {
@@ -12,7 +11,5 @@ namespace SNIClassLibrary
         public string Date { get; set; } = DateTime.Now.ToString("dd/MM/yyyy");
         public string DeviceName { get; set; }
         public List<string> Messages = new List<string>();
-
-
     }
 }

@@ -39,13 +39,13 @@ namespace SuplaNotificationIntegration
                     if (property.Actual != null)
                         if (property.Actual > property.Max || property.Actual < property.Min)
                         {
-                            message += $"{DateTime.Now.ToString("HH:mm")} {property.Name} threshold exceeded " +
+                            message += $"{DateTime.Now.ToString("HH:mm")} {device.Name} {property.Name} threshold exceeded " +
                                 $"Max: {property.Max} Min: {property.Min} Actual: {property.Actual}";
                             report.IncorrectReadings.Add(message);
                         }
                         else
                         {
-                            message += $"{DateTime.Now.ToString("HH:mm")} {property.Name} " +
+                            message += $"{DateTime.Now.ToString("HH:mm")} {device.Name} {property.Name} " +
                                 $"Max: {property.Max} Min: {property.Min} Actual: {property.Actual}";
                             report.CorrectReadings.Add(message.ToString());
                         }
@@ -61,8 +61,15 @@ namespace SuplaNotificationIntegration
                 .GetSNIContainerBlockBlobReference(EnvKeys.DevicesFile)
                 .DownloadText();
             var fileContent = JsonConvert.DeserializeObject<DevicesFileContent>(devicesAsJson);
+            foreach (Device d in fileContent.Devices)
+            {
+                //We're doing this because cosmos db containers cant have '/' in their names
+                //and each device will have a container with its corresponding name
+                d.Name = d.Name.Replace('/', '-');
+            }
             return fileContent.Devices;
         }
+
 
         private List<string> GetSubscribersList(SubscriptionType subType)
         {
@@ -91,9 +98,9 @@ namespace SuplaNotificationIntegration
                 }
             }
             var mailToList = GetSubscribersList(SubscriptionType.Mail);
-            var apiKey = EnvKeys.SNI_SendGrid_ApiKey;
+            var apiKey = EnvKeys.SNISendGridApiKey;
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress(EnvKeys.SNI_SendGrid_Mail);
+            var from = new EmailAddress(EnvKeys.SNISendGridMail);
             var subject = $"SNI Report {DateTime.Now.ToString("dd MMMMM")}";
             var htmlContent = htmlMessage.ToString();
             var plainTextContent = htmlContent.Replace("<br","");
