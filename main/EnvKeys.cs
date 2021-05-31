@@ -4,7 +4,7 @@ namespace SuplaNotificationIntegration
 {
     public static class EnvKeys
     {
-        public static string StorageConnString => Environment.GetEnvironmentVariable("SNI_STORAGE_ACC_CONNECTION_STRING");
+        public static string StorageConnString => Environment.GetEnvironmentVariable("AzureWebJobsStorage");
         public static string SniContainer => Environment.GetEnvironmentVariable("SNI_CONTAINER");
         public static string DevicesFile => Environment.GetEnvironmentVariable("SNI_DEVICES_FILENAME");
         public static string SubscribersFile => Environment.GetEnvironmentVariable("SNI_SUBSCRIBERS_FILENAME");

@@ -2,6 +2,7 @@
 using SNIClassLibrary;
 using SuplaNotificationIntegration.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SuplaNotificationIntegration
@@ -18,12 +19,12 @@ namespace SuplaNotificationIntegration
             _alertsLogger = alertsLogger;
         }
         [FunctionName("Executor")]
-        public async Task Run([TimerTrigger("0 */1 * * * *")] TimerInfo myTimer)
+        public async Task Run([TimerTrigger("0 */20 * * * *")] TimerInfo myTimer)
         {
             List<QuarterlyReport> reports = _reportsManager.GenerateQuarterlyReports();
             await _reportsArchivizer.ArchivizeTheReports(reports);
             await _alertsLogger.LogTheAlerts(reports);
-            await _reportsManager.MailTheReports(reports);
+            await _reportsManager.MailTheReports(reports.Where(x=>x.NotifyAlerts==true).ToList());
         }
     }
 }

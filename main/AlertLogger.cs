@@ -18,7 +18,7 @@ namespace SuplaNotificationIntegration
             string message = "";
             foreach (QuarterlyReport report in reports)
             {
-                foreach (string alert in report.IncorrectReadings)
+                foreach (string alert in report.Alerts)
                 {
                     message += alert + Environment.NewLine + Environment.NewLine;
                 }

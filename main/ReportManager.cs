@@ -29,9 +29,10 @@ namespace SuplaNotificationIntegration
             {
                 QuarterlyReport report = new QuarterlyReport();
                 report.DeviceName = device.Name;
+                report.NotifyAlerts = device.NotifyAlerts;
                 if (device.IsConnected == false)
                 {
-                    report.IncorrectReadings.Add($"{DateTime.Now.ToString("HH:mm")} Cant connect to the {device.Name} device");
+                    report.Alerts.Add($"{DateTime.Now.ToString("HH:mm")} Cant connect to the {device.Name} device");
                 }
                 foreach (MeasuredProperty property in device.MeasuredProperties)
                 {
@@ -41,7 +42,7 @@ namespace SuplaNotificationIntegration
                         {
                             message += $"{DateTime.Now.ToString("HH:mm")} {device.Name} {property.Name} threshold exceeded " +
                                 $"Max: {property.Max} Min: {property.Min} Actual: {property.Actual}";
-                            report.IncorrectReadings.Add(message);
+                            report.Alerts.Add(message);
                         }
                         else
                         {
@@ -88,11 +89,9 @@ namespace SuplaNotificationIntegration
         {
             
             StringBuilder htmlMessage = new StringBuilder();
-
             foreach (QuarterlyReport report in reports)
             {
-                htmlMessage.AppendLine($"{report.DeviceName} <br>");
-                foreach (string alert in report.IncorrectReadings)
+                foreach (string alert in report.Alerts)
                 {
                     htmlMessage.AppendLine($"{alert} <br>");
                 }

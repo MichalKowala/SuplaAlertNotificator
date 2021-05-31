@@ -55,7 +55,7 @@ namespace SuplaNotificationIntegration
             FeedIterator<DailyReport> queryResultSetIterator = this.container.GetItemQueryIterator<DailyReport>(queryDefinition);
             var todaysReport = queryResultSetIterator.ReadNextAsync().Result.First();
             todaysReport.Messages.AddRange(quarterlyReport.CorrectReadings);
-            todaysReport.Messages.AddRange(quarterlyReport.IncorrectReadings);
+            todaysReport.Messages.AddRange(quarterlyReport.Alerts);
             await this.container.ReplaceItemAsync<DailyReport>(todaysReport, todaysReport.Id, new PartitionKey(todaysReport.Id));
         }
     }
